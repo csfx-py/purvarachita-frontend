@@ -43,7 +43,8 @@ function Builder() {
     const [size, setSize] = useState([0, 0]);
     useLayoutEffect(() => {
       function updateSize() {
-        setSize([window.innerWidth, window.innerHeight]);
+        const headerHeight = document.getElementsByTagName("header")[0].offsetHeight;
+        setSize([window.innerWidth, window.innerHeight - headerHeight]);
       }
       window.addEventListener("resize", updateSize);
       updateSize();
@@ -58,6 +59,7 @@ function Builder() {
 
   return (
     <Provider store={store}>
+
       <ReactPlanner
         catalog={MyCatalog}
         width={width}
