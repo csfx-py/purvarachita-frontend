@@ -2,14 +2,14 @@ import { Map } from "immutable";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 
-import MyCatalog from "./catalog/mycatalog";
+import MyCatalog from "../catalog/mycatalog";
 
 import {
   Models as PlannerModels,
   reducer as PlannerReducer,
   ReactPlanner,
   Plugins as PlannerPlugins,
-} from "react-planner";
+} from "prv-react-planner";
 import { useLayoutEffect, useState } from "react";
 
 //define state

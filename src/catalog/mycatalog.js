@@ -1,4 +1,4 @@
-import {Catalog} from 'react-planner';
+import {Catalog} from 'prv-react-planner';
 
 import * as Areas from './areas/**/planner-element.jsx';
 import * as Lines from './lines/**/planner-element.jsx';
