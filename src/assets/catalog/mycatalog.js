@@ -1,9 +1,13 @@
 import {Catalog} from 'prv-react-planner';
 
 import * as Areas from './areas/**/planner-element.jsx';
+// const Areas = import.meta.glob('./areas/**/planner-element.jsx');
 import * as Lines from './lines/**/planner-element.jsx';
+// const Lines = import.meta.glob('./lines/**/planner-element.jsx');
 import * as Holes from './holes/**/planner-element.jsx';
+// const Holes = import.meta.glob('./holes/**/planner-element.jsx');
 import * as Items from './items/**/planner-element.jsx';
+// const Items = import.meta.glob('./items/**/planner-element.jsx');
 
 let catalog = new Catalog();
 

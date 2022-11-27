@@ -2,7 +2,7 @@ import { Map } from "immutable";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 
-import MyCatalog from "../catalog/mycatalog";
+import MyCatalog from "../assets/catalog/mycatalog";
 
 import {
   Models as PlannerModels,

@@ -8406,10 +8406,10 @@ proxy-from-env@^1.1.0:
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
-prv-react-planner@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/prv-react-planner/-/prv-react-planner-2.4.1.tgz#4d7d51cdeda1898154928cbe9280a394282517c5"
-  integrity sha512-jrVA6iPQQSerZG/o8A+rHUhHGRdK+0V44y64SAa9Mq5MoIW0OpQ7z9RrN38KRif2jVN6DUHY0+shz1NtOQTHjg==
+prv-react-planner@^2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/prv-react-planner/-/prv-react-planner-2.4.3.tgz#c4e1ebe4c438bfb9b72d40f41993b839545e83b4"
+  integrity sha512-lACNbJLQAFQkL9ydm1t16mL79GTKtXl4CPq//r1NWzXf1edKZX9WuyJEWvrJR/HP1E/ewWvG0p/PRr+dXZediQ==
   dependencies:
     "@mapbox/react-range" "0.0.7"
     area-polygon "1.0.1"
