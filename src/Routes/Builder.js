@@ -43,7 +43,8 @@ function Builder() {
     const [size, setSize] = useState([0, 0]);
     useLayoutEffect(() => {
       function updateSize() {
-        const headerHeight = document.getElementsByTagName("header")[0].offsetHeight;
+        const headerHeight =
+          document.getElementsByTagName("header")[0]?.offsetHeight || 0;
         setSize([window.innerWidth, window.innerHeight - headerHeight]);
       }
       window.addEventListener("resize", updateSize);
@@ -56,10 +57,8 @@ function Builder() {
   // get screen size
   const [width, height] = useWindowSize();
 
-
   return (
     <Provider store={store}>
-
       <ReactPlanner
         catalog={MyCatalog}
         width={width}
