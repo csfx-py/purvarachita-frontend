@@ -74,28 +74,22 @@ function Post({ post }) {
       elevation={3}
     >
       <Grid container justifyContent="space-between" alignItems="center">
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: "bold",
-          }}
-        >
-          <Avatar
-            sx={{
-              width: 40,
-              height: 40,
-              mr: 1,
-              display: "inline-block",
-            }}
-            src={post?.avatar || AvatarImage}
-          />
-          {post?.name || "Anonymous User"}
-        </Typography>
-        {userData?._id === post?.user && (
-          <IconButton onClick={handleDelete}>
-            <DeleteForever color="secondary" />
-          </IconButton>
-        )}
+        <Grid item>
+          <Grid container alignItems="center">
+            <Avatar
+              src={post?.avatar || AvatarImage}
+              sx={{ width: 40, height: 40, mr: 1 }}
+            />
+            <Typography variant="h6">{post.name}</Typography>
+          </Grid>
+        </Grid>
+        <Grid item>
+          {userData?._id === post?.user && (
+            <IconButton onClick={handleDelete}>
+              <DeleteForever color="secondary" />
+            </IconButton>
+          )}
+        </Grid>
       </Grid>
       <Typography variant="body1">
         {post?.description || "No description provided"}
