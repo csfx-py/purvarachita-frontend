@@ -4,13 +4,22 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { SnackbarProvider } from "notistack";
+import { LoadingProvider } from "./Contexts/LoadingContext";
+import { UserProvider } from "./Contexts/UserContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <SnackbarProvider maxSnack={3}>
+      <LoadingProvider>
+        <UserProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </UserProvider>
+      </LoadingProvider>
+    </SnackbarProvider>
   </React.StrictMode>
 );
 
