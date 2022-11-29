@@ -10,6 +10,12 @@ module.exports = override(
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useBabelRc(),
   (config) => {
+    config.module.rules.push({
+      test: /\.m?js/,
+      resolve: {
+        fullySpecified: false,
+      },
+    });
     // reslove path-browserify and extensions
     config.resolve = {
       ...config.resolve,
@@ -25,6 +31,9 @@ module.exports = override(
         process: "process/browser",
       })
     );
+    config.plugins.push(new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+  }));
     // circular dependency plugin
     config.plugins.push(
       new CircularDependencyPlugin({
