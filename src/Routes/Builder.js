@@ -44,7 +44,7 @@ function Builder() {
     useLayoutEffect(() => {
       function updateSize() {
         const headerHeight =
-          document.getElementsByTagName("header")[0]?.offsetHeight || 0;
+          document.getElementsByTagName("nav")[0]?.offsetHeight || 0;
         setSize([window.innerWidth, window.innerHeight - headerHeight]);
       }
       window.addEventListener("resize", updateSize);
