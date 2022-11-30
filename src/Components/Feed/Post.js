@@ -135,6 +135,29 @@ function Post({ post }) {
           p: 1,
         }}
       >
+        <Grid container component="form" onSubmit={handleSubmit}>
+          <TextField
+            label="Add a comment, Press Enter to submit, Shift + Enter to add a line"
+            variant="outlined"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            sx={{
+              mt: 1,
+              mr: 1,
+              flexGrow: 1,
+            }}
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              mt: 1,
+            }}
+            color="secondary"
+          >
+            Add Comment
+          </Button>
+        </Grid>
         {showComments
           ? post?.comments && (
               <>
@@ -196,28 +219,6 @@ function Post({ post }) {
                 Show Comments
               </Typography>
             )}
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Add a comment"
-            variant="outlined"
-            fullWidth
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            sx={{
-              mt: 1,
-            }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              mt: 1,
-            }}
-            color="secondary"
-          >
-            Add Comment
-          </Button>
-        </form>
       </Box>
     </Paper>
   );
