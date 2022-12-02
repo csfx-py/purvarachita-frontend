@@ -70,7 +70,7 @@ function Auth() {
               sx={{ p: 4, py: 20, width: "100%", height: "100%" }}
             > */}
             <Typography variant="h4" align="center">
-              Mentor Space
+              PurvaRachita
             </Typography>
             {isRegistered ? (
               <Login setIsRegistered={setIsRegistered} />
