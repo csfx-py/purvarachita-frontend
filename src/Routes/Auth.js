@@ -65,10 +65,6 @@ function Auth() {
               minWidth: { xs: "100%", md: "400px" },
             }}
           >
-            {/* <Paper
-              elevation={3}
-              sx={{ p: 4, py: 20, width: "100%", height: "100%" }}
-            > */}
             <Typography variant="h4" align="center">
               PurvaRachita
             </Typography>
@@ -77,7 +73,6 @@ function Auth() {
             ) : (
               <Register setIsRegistered={setIsRegistered} />
             )}
-            {/* </Paper> */}
           </Grid>
         </Grid>
       </Box>

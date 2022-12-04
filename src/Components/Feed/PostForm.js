@@ -123,7 +123,6 @@ function PostForm() {
               mb: 1,
             }}
           />
-          {/* file input with drag and drop */}
           <div
             onDragEnter={handleDrag}
             onDragOver={handleDrag}
