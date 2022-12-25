@@ -1,8 +1,8 @@
-import Record from "../assets/record.svg";
+import Record from "../Assets/record.svg";
 import "../404.css";
 import { Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
-import lofi from "../assets/lofi.mp3";
+import lofi from "../Assets/lofi.mp3";
 
 function Err() {
   const [isPlaying, setIsPlaying] = useState(false);

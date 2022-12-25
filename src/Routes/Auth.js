@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useState } from "react";
-import PrAuth from "../assets/pv.png";
-import BG from "../assets/pv_bg.png";
+import PrAuth from "../Assets/pv.png";
+import BG from "../Assets/pv_bg.png";
 import Login from "../Components/Login";
 import Register from "../Components/Register";
 

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../Utils/API";
 import { LoadingContext } from "./LoadingContext";
 
@@ -6,41 +7,44 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const { setLoading } = useContext(LoadingContext);
+
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    API.get("/auth/refresh")
-      .then((res) => {
-        if (res.data.success) {
-          setUser(res.data.token);
-        } else {
+    if (localStorage.getItem("withCreds"))
+      API.get("/auth/refresh")
+        .then((res) => {
+          if (res.data.success) {
+            setUser(res.data?.token);
+            setRole(res.data?.role);
+          } else {
+            setUser(null);
+            localStorage.removeItem("withCreds");
+            throw new Error("Failed to refresh token");
+          }
+        })
+        .catch((err) => {
           setUser(null);
-          throw new Error("Failed to refresh token");
-        }
-      })
-      .catch((err) => {
-        setUser(null);
-      });
+        });
   }, []);
 
   useEffect(() => {
     if (user) {
-      API.get("/user/user")
-        .then((res) => {
-          if (res.data.success) {
-            setUserData(res.data.user);
-          } else {
-            setUserData(null);
-            throw new Error("Failed to get user data");
-          }
-        })
-        .catch((err) => {
-          setUserData(null);
-        });
-    } else {
-      setUserData(null);
+      API.get("/user/user").then((res) => {
+        if (res.data.success) {
+          setUserData(res?.data?.user);
+          setRole(res?.data?.user?.role);
+        } else {
+          throw new Error(res.data.message);
+        }
+      });
     }
+    setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const register = async (name, email, password) => {
@@ -51,13 +55,14 @@ export const UserProvider = ({ children }) => {
         password,
       });
       if (res.data.success) {
-        setUser(res.data.token);
+        setUser(res.data?.token);
+        localStorage.setItem("withCreds", true);
       } else {
         throw new Error(res.data.message);
       }
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.response?.data?.message || error };
+      return { success: false, error: error.response?.data || error };
     }
   };
 
@@ -66,12 +71,13 @@ export const UserProvider = ({ children }) => {
       const res = await API.post("/auth/login", { email, password });
       if (res.data.success) {
         setUser(res.data.token);
+        localStorage.setItem("withCreds", true);
       } else {
         throw new Error(res.data.message);
       }
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.response?.data?.message || error };
+      return { success: false, error: error.response?.data || error };
     }
   };
 
@@ -79,13 +85,16 @@ export const UserProvider = ({ children }) => {
     try {
       const res = await API.get("/auth/logout");
       if (res.data.success) {
+        navigate("/auth");
         setUser(null);
+        setUserData(null);
+        localStorage.removeItem("withCreds");
       } else {
         throw new Error(res.data.message);
       }
       return { success: true };
     } catch (error) {
-      return { success: false, error: error.response?.data?.message || error };
+      return { success: false, error: error.response?.data || error };
     }
   };
 
@@ -100,15 +109,55 @@ export const UserProvider = ({ children }) => {
       });
       if (res.data.success) {
         setUserData(res.data.user);
-        setLoading(false);
         return { success: true };
       } else {
-        setLoading(false);
         throw new Error(res.data.message);
       }
     } catch (error) {
+      return { success: false, error: error.response?.data || error };
+    } finally {
       setLoading(false);
-      return { success: false, error: error.response?.data?.message || error };
+    }
+  };
+
+  const editUserData = async (details) => {
+    try {
+      setLoading(true);
+
+      const res = await API.put("/user/user", {
+        details,
+      });
+
+      if (res.data.success) {
+        setUserData(res.data.user);
+        return { success: true };
+      } else {
+        throw new Error(res.data.message);
+      }
+    } catch (error) {
+      return { success: false, error: error.response?.data || error };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const changePassword = async (oldPassword, newPassword) => {
+    try {
+      setLoading(true);
+      const res = await API.put("/auth/password", {
+        oldPassword,
+        newPassword,
+      });
+
+      if (res.data.success) {
+        return { success: true };
+      } else {
+        throw new Error(res.data.message);
+      }
+    } catch (error) {
+      return { success: false, error: error.response?.data || error };
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,11 +165,15 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         user,
+        role,
         userData,
+        setUserData,
         login,
         register,
         logout,
         updateAvatar,
+        editUserData,
+        changePassword,
       }}
     >
       {children}

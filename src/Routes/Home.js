@@ -1,10 +1,10 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
-import HomeImage from "../assets/pr_auth.svg";
-import PrBuilder from "../assets/pr_builder.png";
-import PrBuilder2d from "../assets/pr_builder2d.png";
-import PrCommunity from "../assets/pr_community.png";
+import HomeImage from "../Assets/pr_auth.svg";
+import PrBuilder from "../Assets/pr_builder.png";
+import PrBuilder2d from "../Assets/pr_builder2d.png";
+import PrCommunity from "../Assets/pr_community.png";
 
 function Home() {
   return (

@@ -2,10 +2,10 @@ import DeleteForever from "@mui/icons-material/DeleteForever";
 import Edit from "@mui/icons-material/Edit";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { Button, Grid, Typography } from "@mui/material";
-import { useContext, useState } from "react";
-import AvatarImage from "../../assets/avatar.png";
-import { UserContext } from "../../Contexts/UserContext";
 import { useSnackbar } from "notistack";
+import { useContext, useState } from "react";
+import AvatarImage from "../../Assets/avatar.png";
+import { UserContext } from "../../Contexts/UserContext";
 
 function ProfileAvatar() {
   const { userData, updateAvatar } = useContext(UserContext);
@@ -31,13 +31,14 @@ function ProfileAvatar() {
     formData.append("avatar", newAvatarFile);
 
     const res = await updateAvatar(formData);
+
     if (res.success) {
       setNewAvatarFile(null);
       enqueueSnackbar("Avatar updated successfully", {
         variant: "success",
       });
     } else {
-      enqueueSnackbar(res.error, {
+      enqueueSnackbar("Error updating avatar", {
         variant: "error",
       });
     }
@@ -100,7 +101,6 @@ function ProfileAvatar() {
           style={{
             height: "400px",
             width: "400px",
-            maxWidth: "100%",
             borderRadius: "50%",
             alignSelf: "center",
             objectFit: "cover",
