@@ -11,7 +11,7 @@ import Auth from "./Routes/Auth";
 import Feed from "./Routes/Feed";
 import Home from "./Routes/Home";
 import Profile from "./Routes/Profile";
-// import Builder from "./Routes/Builder";
+import Builder from "./Routes/Builder";
 import Err from "./Routes/Err";
 import { AdminProvider } from "./Contexts/AdminContext";
 import Payment from "./Routes/Payment";
@@ -77,12 +77,16 @@ function App() {
                     )
                   }
                 />
-                {/* <Route
-              path="/build"
-              element={
-                user ? <Builder /> : <Navigate to="/auth" state={pathname} />
-              }
-            /> */}
+                <Route
+                  path="/build"
+                  element={
+                    user ? (
+                      <Builder />
+                    ) : (
+                      <Navigate to="/auth" state={pathname} />
+                    )
+                  }
+                />
                 <Route
                   path="/success/:postId/:sessionId"
                   element={
@@ -112,7 +116,11 @@ function App() {
                 <Route
                   path="/profile/:userId"
                   element={
-                    user ? <UserProfile /> : <Navigate to="/auth" state={pathname} />
+                    user ? (
+                      <UserProfile />
+                    ) : (
+                      <Navigate to="/auth" state={pathname} />
+                    )
                   }
                 />
                 <Route
