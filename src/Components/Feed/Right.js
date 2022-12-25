@@ -1,10 +1,11 @@
 import { Grid, Paper, Typography } from "@mui/material";
 import { useContext } from "react";
+import AvatarImg from "../../Assets/avatar.png";
 import { UserContext } from "../../Contexts/UserContext";
-import AvatarImg from "../../assets/avatar.png";
 
-function Right() {
+function Right({ searchedUser = null }) {
   const { userData } = useContext(UserContext);
+
   return (
     <Grid
       item
@@ -23,22 +24,37 @@ function Right() {
         }}
       >
         <img
-          src={userData?.avatar || AvatarImg}
+          src={
+            searchedUser
+              ? searchedUser?.avatar || AvatarImg
+              : userData?.avatar || AvatarImg
+          }
           alt="avatar"
           style={{
-            // width 100% and make it square 
-              height: "400px",
-              width: "400px",
-              maxWidth: "100%",
-              borderRadius: "50%",
-              alignSelf: "center",
-              objectFit: "cover",
+            // width 100% and make it square
+            height: "400px",
+            width: "400px",
+            maxWidth: "100%",
+            borderRadius: "50%",
+            alignSelf: "center",
+            objectFit: "cover",
           }}
         />
-        <Typography variant="h6">{userData?.name}</Typography>
-        <Typography variant="subtitle1">{userData?.email}</Typography>
+        <Typography variant="h6">
+          {searchedUser
+            ? searchedUser?.name || "Anonymous"
+            : userData?.name || "Anonymous"}
+        </Typography>
+        <Typography variant="subtitle1">
+          {searchedUser
+            ? searchedUser?.email || "Anon@Anon.com"
+            : userData?.email || "Anon@Anon.com"}
+        </Typography>
         <Typography variant="subtitle2">
-          Number of Posts: {userData?.posts?.length}
+          Number of Posts:
+          {searchedUser
+            ? searchedUser?.numPosts || 0
+            : userData?.posts?.length || 0}
         </Typography>
       </Paper>
     </Grid>
