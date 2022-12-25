@@ -13,11 +13,11 @@ root.render(
   <React.StrictMode>
     <SnackbarProvider maxSnack={3}>
       <LoadingProvider>
-        <UserProvider>
-          <BrowserRouter>
+        <BrowserRouter>
+          <UserProvider>
             <App />
-          </BrowserRouter>
-        </UserProvider>
+          </UserProvider>
+        </BrowserRouter>
       </LoadingProvider>
     </SnackbarProvider>
   </React.StrictMode>
