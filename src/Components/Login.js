@@ -16,8 +16,13 @@ function Login({ setIsRegistered }) {
     email: "",
     password: "",
   });
+  const [firstEdit, setFirstEdit] = useState({
+    email: false,
+    password: false,
+  });
 
   const handleChange = (e) => {
+    setFirstEdit({ ...firstEdit, [e.target.name]: true });
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
@@ -82,9 +87,11 @@ function Login({ setIsRegistered }) {
         name="email"
         value={data.email}
         error={
+          firstEdit.email &&
           data.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) === null
         }
         helperText={
+          firstEdit.email &&
           data.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) === null
             ? "Enter valid email"
             : ""
@@ -100,12 +107,14 @@ function Login({ setIsRegistered }) {
         value={data.password}
         onChange={handleChange}
         error={
+          firstEdit.password &&
           // password with alphabets and special characters with length 6
           data.password.match(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})/
           ) === null
         }
         helperText={
+          firstEdit.password &&
           data.password.match(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})/
           ) === null
@@ -130,7 +139,6 @@ function Login({ setIsRegistered }) {
           sx={{ color: "primary.main", cursor: "pointer" }}
           onClick={() => setIsRegistered(false)}
         >
-          {" "}
           Register
         </Typography>
       </Typography>

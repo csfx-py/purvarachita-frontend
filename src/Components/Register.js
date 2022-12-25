@@ -18,7 +18,17 @@ function Register({ setIsRegistered }) {
     confirmPassword: "",
   });
 
+  const [firstEdit, setFirstEdit] = useState({
+    name: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+
   const handleChange = (e) => {
+    if (!firstEdit[e.target.name]) {
+      setFirstEdit({ ...firstEdit, [e.target.name]: true });
+    }
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
@@ -87,8 +97,10 @@ function Register({ setIsRegistered }) {
         name="name"
         type="text"
         value={data.name}
-        error={data.name === ""}
-        helperText={data.name === "" ? "Name is required" : ""}
+        error={firstEdit.name && data.name === ""}
+        helperText={
+          firstEdit.name && data.name === "" ? "Name is required" : ""
+        }
         onChange={handleChange}
         autoFocus
       />
@@ -100,9 +112,11 @@ function Register({ setIsRegistered }) {
         name="email"
         value={data.email}
         error={
+          firstEdit.email &&
           data.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) === null
         }
         helperText={
+          firstEdit.email &&
           data.email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) === null
             ? "Enter valid email"
             : ""
@@ -118,12 +132,14 @@ function Register({ setIsRegistered }) {
         value={data.password}
         onChange={handleChange}
         error={
+          firstEdit.password &&
           // password with alphabets and special characters with length 6
           data.password.match(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})/
           ) === null
         }
         helperText={
+          firstEdit.password &&
           data.password.match(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{6,})/
           ) === null
@@ -139,9 +155,13 @@ function Register({ setIsRegistered }) {
         type="password"
         value={data.confirmPassword}
         onChange={handleChange}
-        error={data.password !== data.confirmPassword}
+        error={
+          firstEdit.confirmPassword && data.password !== data.confirmPassword
+        }
         helperText={
-          data.password !== data.confirmPassword ? "Passwords do not match" : ""
+          firstEdit.confirmPassword && data.password !== data.confirmPassword
+            ? "Passwords do not match"
+            : ""
         }
       />
       <Button
@@ -161,7 +181,6 @@ function Register({ setIsRegistered }) {
           sx={{ color: "primary.main", cursor: "pointer" }}
           onClick={() => setIsRegistered(true)}
         >
-          {" "}
           Login
         </Typography>
       </Typography>
