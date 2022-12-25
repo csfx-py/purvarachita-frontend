@@ -1,3 +1,4 @@
+import { Menu as MenuIcon, Search } from "@mui/icons-material";
 import {
   AppBar,
   Avatar,
@@ -7,22 +8,30 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  TextField,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AvatarImage from "../assets/avatar.png";
+import AvatarImage from "../Assets/avatar.png";
+import { FeedContext } from "../Contexts/FeedContext";
 import { UserContext } from "../Contexts/UserContext";
-import MenuIcon from "@mui/icons-material/Menu";
 
 function Nav() {
-  const { userData, logout } = useContext(UserContext);
+  // eslint-disable-next-line no-unused-vars
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const navigate = useNavigate();
+
+  const { userData, logout } = useContext(UserContext);
+  const { searchPosts } = useContext(FeedContext);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [query, setQuery] = useState("");
 
   const settings = [
     {
@@ -30,6 +39,26 @@ function Nav() {
       handler: () => {
         setAnchorElUser(null);
         navigate("/profile");
+      },
+    },
+    {
+      name: "Manage Users",
+      handler: () => {
+        setAnchorElUser(null);
+        navigate("/admin/users");
+      },
+      style: {
+        display: userData?.role === "admin" ? "flex" : "none",
+      },
+    },
+    {
+      name: "Manage Posts",
+      handler: () => {
+        setAnchorElUser(null);
+        navigate("/admin/posts");
+      },
+      style: {
+        display: userData?.role === "admin" ? "flex" : "none",
       },
     },
     {
@@ -81,6 +110,24 @@ function Nav() {
     setAnchorElNav(null);
   };
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    if (!query) {
+      enqueueSnackbar("Please enter a search query", { variant: "error" });
+      return;
+    }
+
+    const res = await searchPosts(query);
+
+    if (!res.success) {
+      enqueueSnackbar(res?.error?.message, { variant: "error" });
+      return;
+    }
+
+    navigate("/search");
+  };
+
   return (
     <AppBar
       component="nav"
@@ -96,7 +143,7 @@ function Nav() {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href={userData ? "/community" : "/"}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -108,6 +155,50 @@ function Nav() {
           >
             PurvaRachita
           </Typography>
+
+          {userData && (
+            <form
+              noValidate
+              autoComplete="off"
+              style={{
+                display: "flex",
+                flexGrow: 1,
+              }}
+              onSubmit={handleSearch}
+            >
+              <TextField
+                sx={{ ml: 1, flex: 1 }}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                variant="standard"
+                size="small"
+                placeholder="Search Posts"
+                InputProps={{
+                  sx: {
+                    color: "white",
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    p: "10px",
+                    "&::placeholder": {
+                      color: "white",
+                    },
+                  },
+                }}
+              />
+              <IconButton
+                type="submit"
+                sx={{
+                  p: "10px",
+                }}
+                aria-label="search"
+              >
+                <Search
+                  sx={{
+                    color: "white",
+                  }}
+                />
+              </IconButton>
+            </form>
+          )}
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -153,13 +244,58 @@ function Nav() {
                   </Typography>
                 </MenuItem>
               ))}
+              {userData && (
+                <MenuItem>
+                  <form
+                    noValidate
+                    autoComplete="off"
+                    style={{
+                      display: "flex",
+                      flexGrow: 1,
+                    }}
+                    onSubmit={handleSearch}
+                  >
+                    <TextField
+                      sx={{ ml: 1, flex: 1 }}
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      variant="standard"
+                      size="small"
+                      placeholder="Search Posts"
+                      InputProps={{
+                        sx: {
+                          color: "white",
+                          backgroundColor: "rgba(255, 255, 255, 0.1)",
+                          p: "10px",
+                          "&::placeholder": {
+                            color: "white",
+                          },
+                        },
+                      }}
+                    />
+                    <IconButton
+                      type="submit"
+                      sx={{
+                        p: "10px",
+                      }}
+                      aria-label="search"
+                    >
+                      <Search
+                        sx={{
+                          color: "white",
+                        }}
+                      />
+                    </IconButton>
+                  </form>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href=""
+            href={userData ? "/community" : "/"}
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
@@ -197,33 +333,15 @@ function Nav() {
               </Button>
             ))}
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            {userData ? (
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={userData?.name}
-                    src={userData?.avatar ? userData?.avatar : AvatarImage}
-                  />
-                </IconButton>
-              </Tooltip>
-            ) : (
-              <Button
-                onClick={(e) => {
-                  navigate("/auth");
-                }}
-                sx={{
-                  fontWeight: 700,
-                  letterSpacing: ".1rem",
-                  textDecoration: "none",
-                  my: 2,
-                  color: "white",
-                  display: "block",
-                }}
-              >
-                Login
-              </Button>
-            )}
+          <Box sx={{ ml: "auto" }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar
+                  alt="Remy Sharp"
+                  src={userData?.avatar || AvatarImage}
+                />
+              </IconButton>
+            </Tooltip>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -240,9 +358,15 @@ function Nav() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={setting.handler}>
-                  <Typography textAlign="center">{setting.name}</Typography>
+              {settings.map((setting, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={handleCloseUserMenu}
+                  sx={setting.style}
+                >
+                  <Typography variant="h6" onClick={setting.handler}>
+                    {setting.name}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
