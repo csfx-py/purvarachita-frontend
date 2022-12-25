@@ -1,12 +1,10 @@
-import HideSourceIcon from "@mui/icons-material/HideSource";
+import { HourglassBottom } from "@mui/icons-material";
 import "../loading.css";
 
 function Loading() {
   return (
-    <div
-      className="backdrop"
-    >
-      <HideSourceIcon className="spin" />
+    <div className="backdrop">
+      <HourglassBottom className="spin" />
     </div>
   );
 }
