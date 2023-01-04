@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
 
-function Register({ setIsRegistered }) {
+function Register({ setComp }) {
   const { register } = useContext(UserContext);
   // eslint-disable-next-line no-unused-vars
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -57,6 +57,11 @@ function Register({ setIsRegistered }) {
       return false;
     }
 
+    if (!data.password === data.confirmPassword) {
+      enqueueSnackbar("Passwords do not match");
+      return false;
+    }
+
     return true;
   };
 
@@ -87,7 +92,7 @@ function Register({ setIsRegistered }) {
       }}
     >
       <Typography variant="h6">
-        <Lock sx={{ mr: 1 }} verticalAlign="middle" />
+        <Lock sx={{ mr: 1, verticalAlign: "middle" }} />
         Register
       </Typography>
       <TextField
@@ -179,10 +184,18 @@ function Register({ setIsRegistered }) {
           variant="body2"
           component="span"
           sx={{ color: "primary.main", cursor: "pointer" }}
-          onClick={() => setIsRegistered(true)}
+          onClick={() => setComp("login")}
         >
           Login
         </Typography>
+      </Typography>
+      <Typography
+        variant="body2"
+        component="span"
+        sx={{ color: "primary.main", cursor: "pointer" }}
+        onClick={() => setComp("forgot")}
+      >
+        Forgot Password?
       </Typography>
     </form>
   );

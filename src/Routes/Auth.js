@@ -4,9 +4,10 @@ import PrAuth from "../Assets/pv.png";
 import BG from "../Assets/pv_bg.png";
 import Login from "../Components/Login";
 import Register from "../Components/Register";
+import ResetPass from "../Components/ResetPass";
 
 function Auth() {
-  const [isRegistered, setIsRegistered] = useState(true);
+  const [comp, setComp] = useState("reg");
   return (
     <>
       <Box
@@ -68,11 +69,9 @@ function Auth() {
             <Typography variant="h4" align="center">
               PurvaRachita
             </Typography>
-            {isRegistered ? (
-              <Login setIsRegistered={setIsRegistered} />
-            ) : (
-              <Register setIsRegistered={setIsRegistered} />
-            )}
+            {comp === "login" && <Login setComp={setComp} />}
+            {comp === "reg" && <Register setComp={setComp} />}
+            {comp === "forgot" && <ResetPass setComp={setComp} />}
           </Grid>
         </Grid>
       </Box>

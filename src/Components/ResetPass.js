@@ -1,25 +1,28 @@
-import { Lock } from "@mui/icons-material";
-import { Button, TextField, Typography } from "@mui/material";
+import { Lock, Send } from "@mui/icons-material";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
 
-function Login({ setComp }) {
-  const { login } = useContext(UserContext);
+export default function ResetPass({ setComp }) {
+  const { reset, getOtp } = useContext(UserContext);
   // eslint-disable-next-line no-unused-vars
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const navigate = useNavigate();
-
   const [data, setData] = useState({
     email: "",
-    password: "",
   });
   const [firstEdit, setFirstEdit] = useState({
     email: false,
-    password: false,
   });
+
+  const [passDisabled, setPassDisabled] = useState(true);
 
   const handleChange = (e) => {
     setFirstEdit({ ...firstEdit, [e.target.name]: true });
@@ -45,25 +48,43 @@ function Login({ setComp }) {
       );
       return false;
     }
+    if (!data.password === data.confirmPassword) {
+      enqueueSnackbar("Passwords do not match");
+      return false;
+    }
+
     return true;
+  };
+
+  const handleEmail = async (e) => {
+    e.preventDefault();
+
+    if (data.email === "") {
+      enqueueSnackbar("Please fill the field");
+      return false;
+    }
+
+    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+    if (!emailRegex.test(data.email)) {
+      enqueueSnackbar("Please enter a valid email");
+      return false;
+    }
+
+    const otp = await getOtp(data.email);
+
+    if (otp.success) {
+      enqueueSnackbar("Otp sent Successfully", { variant: "success" });
+      setPassDisabled(false);
+    } else {
+      enqueueSnackbar(`Otp sending Failed ${otp.error.message}`, {
+        variant: "error",
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) {
-      return;
-    }
-
-    const loggedIn = await login(data.email, data.password);
-
-    if (loggedIn.success) {
-      enqueueSnackbar("Logged In Successfully", { variant: "success" });
-      navigate("/build");
-    } else {
-      enqueueSnackbar(`Login Failed ${loggedIn.error.message}`, {
-        variant: "error",
-      });
-    }
+    console.log(data);
   };
 
   return (
@@ -75,12 +96,16 @@ function Login({ setComp }) {
         alignItems: "center",
       }}
     >
+      <Typography variant="h3"
+        align="center"
+      >Work under progress</Typography>
       <Typography variant="h6">
         <Lock sx={{ mr: 1, verticalAlign: "middle" }} />
-        Login
+        Reset Password
       </Typography>
       <TextField
         variant="standard"
+        disabled={true}
         placeholder="email"
         sx={{ width: "100%", maxWidth: 300, my: 1 }}
         type="email"
@@ -97,9 +122,27 @@ function Login({ setComp }) {
             : ""
         }
         onChange={handleChange}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={handleEmail}
+                aria-label="send otp"
+                edge="end"
+                disabled={true}
+              >
+                <Typography variant="body2" color="secondary">
+                  Send OTP
+                </Typography>
+                <Send color="secondary" />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
       <TextField
         variant="standard"
+        disabled={passDisabled}
         placeholder="Password"
         sx={{ width: "100%", maxWidth: 300, my: 1 }}
         name="password"
@@ -122,14 +165,33 @@ function Login({ setComp }) {
             : ""
         }
       />
+      <TextField
+        variant="standard"
+        disabled={passDisabled}
+        placeholder="Confirm Password"
+        sx={{ width: "100%", maxWidth: 300, my: 1 }}
+        name="confirmPassword"
+        type="password"
+        value={data.confirmPassword}
+        onChange={handleChange}
+        error={
+          firstEdit.confirmPassword && data.password !== data.confirmPassword
+        }
+        helperText={
+          firstEdit.confirmPassword && data.password !== data.confirmPassword
+            ? "Passwords do not match"
+            : ""
+        }
+      />
       <Button
         variant="contained"
+        disabled={passDisabled}
         sx={{ width: "100%", maxWidth: 300, my: 1 }}
         onClick={handleSubmit}
         type="submit"
         color="secondary"
       >
-        Login
+        Submit
       </Button>
       <Typography variant="body2">
         Don't have an account?
@@ -142,16 +204,6 @@ function Login({ setComp }) {
           Register
         </Typography>
       </Typography>
-      <Typography
-        variant="body2"
-        component="span"
-        sx={{ color: "primary.main", cursor: "pointer" }}
-        onClick={() => setComp("forgot")}
-      >
-        Forgot Password?
-      </Typography>
     </form>
   );
 }
-
-export default Login;
