@@ -27,8 +27,8 @@ export default function PostDecsription({ post }) {
                   alt={file?.name}
                   key={file._id}
                   style={{
-                    maxWidth: "50%",
-                    maxHeight: "50%",
+                    maxHeight: "400px",
+                    // maxWidth: "50%",
                     margin: "0.5rem",
                   }}
                 />
