@@ -6,6 +6,7 @@ import {
   Button,
   Container,
   IconButton,
+  InputAdornment,
   Menu,
   MenuItem,
   TextField,
@@ -15,7 +16,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AvatarImage from "../Assets/avatar.png";
 import { FeedContext } from "../Contexts/FeedContext";
 import { UserContext } from "../Contexts/UserContext";
@@ -25,6 +26,8 @@ function Nav() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
+
+  const { pathname } = useLocation();
 
   const { userData, logout } = useContext(UserContext);
   const { searchPosts } = useContext(FeedContext);
@@ -94,6 +97,12 @@ function Nav() {
     },
   ];
 
+  const searchBarAvailable = [
+    "/community",
+    "/search",
+    "/profile/:userId",
+    "/post/:postId",
+  ];
   const handleOpenUserMenu = (e) => {
     setAnchorElUser(e.currentTarget);
   };
@@ -156,7 +165,7 @@ function Nav() {
             PurvaRachita
           </Typography>
 
-          {userData && (
+          {userData && searchBarAvailable.includes(pathname) && (
             <form
               noValidate
               autoComplete="off"
@@ -167,36 +176,37 @@ function Nav() {
               onSubmit={handleSearch}
             >
               <TextField
-                sx={{ ml: 1, flex: 1 }}
+                sx={{ ml: 1, flexGrow: 1 }}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                variant="standard"
+                variant="outlined"
+                label="Search Posts"
                 size="small"
                 placeholder="Search Posts"
                 InputProps={{
                   sx: {
-                    color: "white",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    p: "10px",
-                    "&::placeholder": {
-                      color: "white",
-                    },
+                    // color: "white",
+                    backgroundColor: "rgba(255, 255, 255, 1)",
+                    // "&::placeholder": {
+                    //   color: "white",
+                    // },
                   },
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        type="submit"
+                        size="large"
+                        sx={{
+                          mt: 1,
+                        }}
+                        color="primary"
+                      >
+                        <Search color="secondary" />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
                 }}
               />
-              <IconButton
-                type="submit"
-                sx={{
-                  p: "10px",
-                }}
-                aria-label="search"
-              >
-                <Search
-                  sx={{
-                    color: "white",
-                  }}
-                />
-              </IconButton>
             </form>
           )}
 
@@ -244,7 +254,7 @@ function Nav() {
                   </Typography>
                 </MenuItem>
               ))}
-              {userData && (
+              {userData && searchBarAvailable.includes(pathname) && (
                 <MenuItem>
                   <form
                     noValidate
@@ -265,7 +275,7 @@ function Nav() {
                       InputProps={{
                         sx: {
                           color: "white",
-                          backgroundColor: "rgba(255, 255, 255, 0.1)",
+                          // backgroundColor: "rgba(255, 255, 255, 0.1)",
                           p: "10px",
                           "&::placeholder": {
                             color: "white",
