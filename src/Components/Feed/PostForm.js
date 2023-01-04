@@ -1,12 +1,5 @@
-import { Delete, Paid } from "@mui/icons-material";
-import {
-  Button,
-  Grid,
-  IconButton,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { AttachFile, Delete, Paid } from "@mui/icons-material";
+import { Button, Grid, IconButton, Paper, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useContext, useState } from "react";
 import { FeedContext } from "../../Contexts/FeedContext";
@@ -49,6 +42,8 @@ function PostForm() {
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    setDragging(false);
 
     const dt = e.dataTransfer;
     const newFiles = dt.files;
@@ -149,84 +144,38 @@ function PostForm() {
           p: 1,
         }}
       >
-        <Typography variant="h5">Create Post</Typography>
+        {/* <Typography variant="h5">Create Post</Typography> */}
         <form onDragEnter={handleDrag} onSubmit={handleSubmit}>
-          <Grid item xs={12}>
-            <TextField
-              name="title"
-              label="Document title"
-              fullWidth
-              size="small"
-              variant="outlined"
-              value={title}
-              onChange={handleTextChange}
-              sx={{
-                mb: 1,
-              }}
-            />
-          </Grid>
-          <TextField
-            name="description"
-            label="Document description"
-            multiline
-            rows={4}
-            fullWidth
-            variant="outlined"
-            value={description}
-            onChange={handleTextChange}
-            sx={{
-              mb: 1,
-            }}
-          />
-          {/* file input with drag and drop */}
-          <Grid container spacing={1}>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              sx={{
-                pt: "16px !important",
-              }}
-            >
-              <div
-                onDragEnter={handleDrag}
-                onDragOver={handleDrag}
-                onDragLeave={handleDrag}
-                onDrop={handleDrop}
-                style={dragging ? draggedStyle : {}}
-              >
-                <input
-                  type="file"
-                  id="file"
-                  multiple
-                  onChange={handleFileChange}
-                  style={{ display: "none" }}
-                />
-                <label htmlFor="file">
-                  <Button
-                    variant="raised"
-                    component="span"
-                    fullWidth
-                    sx={{
-                      p: 1,
-                      pt: 2,
-                      pb: 3,
-                      border: "2px dashed #ccc",
-
-                      "&:focus": {
-                        border: "2px dashed #000",
-                        backgroundColor: "rgba(0,0,0,.05)",
-                      },
-                    }}
-                  >
-                    Upload Files
-                  </Button>
-                </label>
-              </div>
+          <div
+            onDragEnter={handleDrag}
+            onDragOver={handleDrag}
+            onDragLeave={handleDrag}
+            onDrop={handleDrop}
+            style={
+              dragging
+                ? draggedStyle
+                : {
+                    border: "2px solid transparent",
+                  }
+            }
+          >
+            <Grid item xs={12}>
+              <TextField
+                name="title"
+                label=" Title: what is your post about?"
+                fullWidth
+                size="small"
+                variant="outlined"
+                value={title}
+                onChange={handleTextChange}
+                sx={{
+                  mb: 1,
+                }}
+              />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12}>
               <Grid container>
-                <Grid item xs={12}>
+                <Grid item xs={6} sx={{ pt: 1 }}>
                   Should the post be paid?
                   <IconButton
                     variant="text"
@@ -250,7 +199,7 @@ function PostForm() {
                   </IconButton>
                 </Grid>
                 {isPaid && (
-                  <Grid item xs={12}>
+                  <Grid item xs={6}>
                     <TextField
                       name="price"
                       type="number"
@@ -265,48 +214,86 @@ function PostForm() {
                 )}
               </Grid>
             </Grid>
-          </Grid>
-          {files.length > 0 && (
-            <Grid
-              container
-              spacing={1}
+            <TextField
+              name="description"
+              label="What would you like to share?"
+              multiline
+              rows={4}
+              fullWidth
+              variant="outlined"
+              value={description}
+              onChange={handleTextChange}
               sx={{
-                p: 0,
-                mt: 1,
+                mb: 1,
               }}
-            >
-              {files.map((file) => (
-                <Grid
-                  item
-                  key={file.name}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    p: 2,
-                    border: "1px solid #ccc",
-                    borderRadius: 10,
-                    backgroundColor: "rgba(0,0,0,.05)",
-                    m: 1,
-                  }}
-                >
-                  {file.name}
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setFiles(files.filter((f) => f.name !== file.name));
+            />
+            {/* <Grid container spacing={1}> */}
+            {/* <Grid
+              item
+              xs={12}
+              md={6}
+              sx={{
+                pt: "16px !important",
+              }}
+            > */}
+            <input
+              type="file"
+              id="file"
+              multiple
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+            />
+            <label htmlFor="file">
+              <Button variant="raised" component="span" fullWidth>
+                <AttachFile />
+                Upload Files by clicking here or drag and drop
+              </Button>
+            </label>
+            {/* </Grid> */}
+            {files.length > 0 && (
+              <Grid
+                container
+                spacing={1}
+                sx={{
+                  p: 0,
+                  mt: 1,
+                }}
+              >
+                {files.map((file) => (
+                  <Grid
+                    item
+                    key={file.name}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      p: 2,
+                      border: "1px solid #ccc",
+                      borderRadius: 10,
+                      backgroundColor: "rgba(0,0,0,.05)",
+                      m: 1,
                     }}
                   >
-                    <Delete
-                      sx={{
-                        color: "red",
+                    {file.name}
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        setFiles(files.filter((f) => f.name !== file.name));
                       }}
-                    />
-                  </IconButton>
-                </Grid>
-              ))}
-            </Grid>
-          )}
+                    >
+                      <Delete
+                        sx={{
+                          color: "red",
+                        }}
+                      />
+                    </IconButton>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+
+            {/* </Grid> */}
+          </div>
           <Button
             variant="contained"
             type="submit"
