@@ -133,17 +133,18 @@ export default function ProfielDetails() {
             Profile Details
           </Typography>
           <Typography variant="body1" gutterBottom>
-            <IconButton onClick={() => setEdit(true)}>
-              <Edit />
-            </IconButton>
             Name: {userData?.name}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            <IconButton onClick={() => setEdit(true)}>
-              <Edit />
-            </IconButton>
             Email: {userData?.email}
           </Typography>
+          <Button
+            onClick={() => setEdit(true)}
+            variant="contained"
+            sx={{ mt: 3, mb: 2, mr: 1 }}
+          >
+            Edit Profile
+          </Button>
         </>
       ) : (
         <form onSubmit={handleSubmit}>
@@ -171,12 +172,7 @@ export default function ProfielDetails() {
             name="email"
             autoFocus
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+          <Button onClick={() => setEditPassword(true)} variant="contained">
             Save
           </Button>
         </form>
