@@ -161,6 +161,25 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const getOtp = async (email) => {
+    try {
+      setLoading(true);
+      const res = await API.post("/auth/otp", {
+        email,
+      });
+
+      if (res.data.success) {
+        return { success: true };
+      } else {
+        throw new Error(res.data.message);
+      }
+    } catch (error) {
+      return { success: false, error: error.response?.data || error };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -174,6 +193,7 @@ export const UserProvider = ({ children }) => {
         updateAvatar,
         editUserData,
         changePassword,
+        getOtp,
       }}
     >
       {children}

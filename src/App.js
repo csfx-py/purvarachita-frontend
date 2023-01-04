@@ -78,16 +78,6 @@ function App() {
                   }
                 />
                 <Route
-                  path="/build"
-                  element={
-                    user ? (
-                      <Builder />
-                    ) : (
-                      <Navigate to="/auth" state={pathname} />
-                    )
-                  }
-                />
-                <Route
                   path="/success/:postId/:sessionId"
                   element={
                     user ? (
@@ -160,6 +150,16 @@ function App() {
                       <AdminUsers />
                     ) : (
                       <Navigate to="/404" state={pathname} />
+                    )
+                  }
+                />
+                <Route
+                  path="/build"
+                  element={
+                    user ? (
+                      <Builder />
+                    ) : (
+                      <Navigate to="/auth" state={pathname} />
                     )
                   }
                 />
